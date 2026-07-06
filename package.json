@@ -1,0 +1,83 @@
+{
+    "name":  "open-in-typora",
+    "displayName":  "Open in Typora",
+    "description":  "Open Markdown files in Typora via right-click menu.",
+    "version":  "1.0.0",
+    "publisher":  "opentypora",
+    "license":  "MIT",
+    "engines":  {
+                    "vscode":  "^1.85.0"
+                },
+    "categories":  [
+                       "Other"
+                   ],
+    "main":  "./dist/extension.js",
+    "activationEvents":  [
+
+                         ],
+    "contributes":  {
+                        "commands":  [
+                                         {
+                                             "command":  "openInTypora.open",
+                                             "title":  "Open in Typora",
+                                             "category":  "Typora"
+                                         }
+                                     ],
+                        "menus":  {
+                                      "explorer/context":  [
+                                                               {
+                                                                   "command":  "openInTypora.open",
+                                                                   "when":  "resourceLangId == \u0027markdown\u0027",
+                                                                   "group":  "navigation@9"
+                                                               }
+                                                           ],
+                                      "editor/context":  [
+                                                             {
+                                                                 "command":  "openInTypora.open",
+                                                                 "when":  "resourceLangId == \u0027markdown\u0027",
+                                                                 "group":  "navigation@9"
+                                                             }
+                                                         ],
+                                      "editor/title/context":  [
+                                                                   {
+                                                                       "command":  "openInTypora.open",
+                                                                       "when":  "resourceLangId == \u0027markdown\u0027",
+                                                                       "group":  "navigation@9"
+                                                                   }
+                                                               ]
+                                  },
+                        "configuration":  {
+                                              "title":  "Open in Typora",
+                                              "properties":  {
+                                                                 "openInTypora.executablePath":  {
+                                                                                                     "type":  "string",
+                                                                                                     "default":  "",
+                                                                                                     "markdownDescription":  "Path to the Typora executable. Example (Windows): `D:\\Program Files\\Typora\\Typora.exe`"
+                                                                                                 }
+                                                             }
+                                          }
+                    },
+    "scripts":  {
+                    "vscode:prepublish":  "npm run package",
+                    "compile":  "node esbuild.js --production=false",
+                    "package":  "node esbuild.js --production=true",
+                    "watch":  "node esbuild.js --watch",
+                    "test":  "vitest run",
+                    "test:watch":  "vitest",
+                    "lint":  "eslint src --ext ts"
+                },
+    "devDependencies":  {
+                            "@types/node":  "^20.11.0",
+                            "@types/vscode":  "^1.85.0",
+                            "@typescript-eslint/eslint-plugin":  "^7.0.0",
+                            "@typescript-eslint/parser":  "^7.0.0",
+                            "esbuild":  "^0.20.0",
+                            "eslint":  "^8.57.0",
+                            "typescript":  "^5.3.0",
+                            "vitest":  "^1.2.0"
+                        },
+    "repository":  {
+                       "type":  "git",
+                       "url":  "https://github.com/1207575273/open-in-typora-vscode.git"
+                   }
+}
