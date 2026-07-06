@@ -1,46 +1,60 @@
 # Open in Typora for VSCode
 
-Open Markdown files in Typora via right-click menu.
+在 VSCode 里通过右键菜单用 Typora 打开 Markdown 文件。
 
-## Features
+## 功能
 
-- Right-click any `.md` / `.markdown` file → **Open in Typora**
-- Works in Explorer, Editor, and Editor Title (tab) context menus
-- Configure the Typora executable path in Settings
+- 右键任意 `.md` / `.markdown` 文件 → **Open in Typora**
+- 在三处菜单生效:资源管理器文件树、编辑器右键、标签页右键
+- 在设置里配置 Typora 安装路径
 
-## Requirements
+## 前置要求
 
-- [Typora](https://typora.io/) installed on your machine
+本机已安装 [Typora](https://typora.io/)
 
-## Installation
+## 安装
 
-### From VSIX
+### 从 VSIX 安装
 
-1. In VSCode, open the Extensions view (`Ctrl+Shift+X`)
-2. Click the `...` menu → **Install from VSIX...**
-3. Select `open-in-typora-1.0.0.vsix`
-4. Reload VSCode
+1. 在 VSCode 打开扩展视图(`Ctrl+Shift+X`)
+2. 点右上 `...` 菜单 → **从 VSIX 安装...**
+3. 选择 `open-in-typora-1.0.0.vsix`
+4. 重新加载 VSCode
 
-## Configuration
+## 配置
 
-Settings → Extensions → Open in Typora:
+设置 → 扩展 → Open in Typora,或直接搜索 `openInTypora`:
 
-- `openInTypora.executablePath`: Path to the Typora executable.
-  - Windows: `D:\Program Files\Typora\Typora.exe`
-  - macOS: `/Applications/Typora.app/Contents/MacOS/Typora`
-  - Linux: `/usr/bin/typora`
+- `openInTypora.executablePath`:Typora 可执行文件路径
+  - Windows:`D:\Program Files\Typora\Typora.exe`
+  - macOS:`/Applications/Typora.app/Contents/MacOS/Typora`
+  - Linux:`/usr/bin/typora`
 
-## Architecture
+## 架构
 
-Layered design — the domain layer is pure TypeScript with zero `vscode` dependency,
-fully covered by vitest unit tests:
+分层设计,领域层为纯 TypeScript、零 `vscode` 依赖,由 vitest 单测完整覆盖:
 
 ```
-commands/   adapter layer (depends on vscode API)
-process/    child_process.spawn wrapper
-domain/     pure TS (predicate, launch command, path validator)
+src/
+├── commands/   适配层(依赖 vscode API)
+├── process/    基础设施层(child_process.spawn 封装)
+├── domain/     领域层(文件判断 / 命令对象 / 路径校验,纯 TS)
+├── test/       vitest 单元测试
+└── extension.ts 激活入口
 ```
 
-## License
+右键菜单的显示由 `package.json` 的声明式 `when: "resourceLangId == 'markdown'"` 控制,
+VSCode 内置 `markdown` 语言标识,无需自行判断后缀。
+
+## 构建
+
+```bash
+pnpm install          # 安装依赖
+pnpm test             # 运行单测
+pnpm run package      # esbuild 打包 -> dist/extension.js
+pnpm dlx @vscode/vsce package  # 产出 .vsix
+```
+
+## 许可证
 
 MIT
